@@ -62,16 +62,18 @@
         </h2>
     </noscript>
     
-    <div>
+    <center>
         <div>
-            <button id="connect" onclick="connect();">Connect</button>
-            <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+            <div>
+                <button id="connect" onclick="connect();">Connect</button>
+                <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
+            </div>
+            <div id="conversationDiv">
+                <label>What is your name?</label><input type="text" id="name" />
+                <button id="sendName" onclick="sendName();">Send</button>
+                <p id="response"></p>
+            </div>
         </div>
-        <div id="conversationDiv">
-            <label>What is your name?</label><input type="text" id="name" />
-            <button id="sendName" onclick="sendName();">Send</button>
-            <p id="response"></p>
-        </div>
-    </div>
+    </center>
 </body>
 </html>

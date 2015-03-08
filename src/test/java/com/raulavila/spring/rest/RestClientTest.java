@@ -2,12 +2,16 @@ package com.raulavila.spring.rest;
 
 import java.util.concurrent.ExecutionException;
 
+import org.fest.assertions.api.Assertions;
 import org.junit.Test;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 import org.springframework.web.client.AsyncRestTemplate;
 import org.springframework.web.client.RestTemplate;
+
+import static org.fest.assertions.api.Assertions.*;
 
 //Run this tests after starting Embedded Jetty Server
 public class RestClientTest {
@@ -19,7 +23,11 @@ public class RestClientTest {
 		ResponseEntity<String> response = restTemplate.getForEntity(
                 "http://localhost:8080/items4", String.class);
 
-		System.out.println("Received!:" + response.getBody());
+		System.out.println("Received!:");
+		assertThat(response.getStatusCode())
+				.isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody())
+				.isEqualTo("[\"item1 - Spring 4\",\"item2 - Spring 4\"]");
 	}
 
 	@Test
@@ -30,8 +38,8 @@ public class RestClientTest {
 				.getForEntity("http://localhost:8080/items4",
 						String.class);
 
-		futureEntity
-				.addCallback(new ListenableFutureCallback<ResponseEntity<String>>() {
+		futureEntity.addCallback(
+				new ListenableFutureCallback<ResponseEntity<String>>() {
 					@Override
 					public void onSuccess(ResponseEntity<String> result) {
 						System.out.println("Received!: " + result.getBody());
@@ -56,14 +64,17 @@ public class RestClientTest {
 	public void testAsyncRestTemplate2() {
 		AsyncRestTemplate restTemplate = new AsyncRestTemplate();
 
-		ListenableFuture<ResponseEntity<String>> futureEntity = restTemplate
-				.getForEntity("http://localhost:8080/items4",
+		ListenableFuture<ResponseEntity<String>> futureEntity = 
+				restTemplate.getForEntity(
+						"http://localhost:8080/items4",
 						String.class);
+		
 		ResponseEntity<String> result = null;
+		
 		try {
+			//blocks waiting for the response
 			result = futureEntity.get();
-            System.out.println("Sent request!");
-
+            
 			System.out.println("Received: " + result.getBody());
 
 		} catch (InterruptedException | ExecutionException e) {

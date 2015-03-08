@@ -9,7 +9,7 @@ public class OrderQualifiersApp {
 
 		ApplicationContext context = new ClassPathXmlApplicationContext(
 				"spring-beans-order-qualifiers.xml");
- 
+
 		MultiGreetingPrinter printer = (MultiGreetingPrinter) context.getBean("multiGreetingPrinter");
 		printer.printGreeting();
 		
